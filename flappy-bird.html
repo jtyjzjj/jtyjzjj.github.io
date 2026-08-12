@@ -6,6 +6,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="theme-color" content="#4EC0CA">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%2371C5CF'/%3E%3Cellipse cx='8' cy='8' rx='6' ry='5' fill='%23FBD955' stroke='%23533747'/%3E%3Ccircle cx='10.5' cy='6.5' r='2.2' fill='%23fff'/%3E%3Ccircle cx='11.3' cy='6.5' r='.9' fill='%23533747'/%3E%3Cpath d='M11 9h4v2h-4z' fill='%23F8823C' stroke='%23533747' stroke-width='.5'/%3E%3C/svg%3E">
 <title>Flappy Bird</title>
 <style>
   html, body {
@@ -397,9 +398,9 @@ function play(name) {
 /* ============================================================
  *  游戏状态与参数
  * ============================================================ */
-const GRAVITY = 1050;       // px/s²
-const FLAP_V  = -295;       // 拍翅速度
-const MAX_FALL = 480;
+const GRAVITY = 1000;       // px/s²
+const FLAP_V  = -292;       // 拍翅速度
+const MAX_FALL = 450;
 const BASE_SPEED = 125;     // 水管移动速度 px/s
 const PIPE_SPACING = 172;   // 水管水平间距
 const BIRD_X = 78;
@@ -424,8 +425,8 @@ let floaters = [];           // +1 漂浮
 let distSinceSpawn = 0;
 let time = 0;
 
-function currentSpeed() { return BASE_SPEED + Math.min(score, 50) * 0.7; }
-function currentGap()   { return Math.max(102, 132 - score * 0.9); }
+function currentSpeed() { return BASE_SPEED + Math.min(score, 50) * 0.55; }
+function currentGap()   { return Math.max(106, 132 - score * 0.7); }
 
 function resetGame() {
   bird.y = GROUND_Y * 0.46;
@@ -443,8 +444,15 @@ function resetGame() {
 function spawnPipe() {
   const gap = currentGap();
   const margin = 60;
-  const minC = margin + gap / 2;
-  const maxC = GROUND_Y - margin - gap / 2;
+  let minC = margin + gap / 2;
+  let maxC = GROUND_Y - margin - gap / 2;
+  // 限制相邻两根管口的高度落差，避免不公平的难度尖峰（难度越高限制越紧）
+  const prev = pipes[pipes.length - 1];
+  if (prev) {
+    const maxDelta = 132 - (132 - gap);
+    minC = Math.max(minC, prev.gapY - maxDelta);
+    maxC = Math.min(maxC, prev.gapY + maxDelta);
+  }
   const gapY = minC + Math.random() * (maxC - minC);
   pipes.push({ x: W + 10, gapY, gap, scored: false });
 }
