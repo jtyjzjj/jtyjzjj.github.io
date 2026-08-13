@@ -227,7 +227,7 @@
   .tile-face {
     position: absolute; inset: 0;
     background: linear-gradient(180deg, #fffefb 0%, #fff4df 100%);
-    border: 2px solid #f3e2c0;
+    border: 3px solid #f3e2c0;
     border-radius: 11px;
     box-shadow:
       inset 0 1px 0 #fff,
@@ -250,9 +250,11 @@
   .tile.clickable .tile-face { filter: brightness(1.04); }
   .tile.shake { animation: shake .28s ease; }
   @keyframes shake {
-    0%,100% { transform: translateX(0); }
-    25% { transform: translateX(-4px) rotate(-2deg); }
-    75% { transform: translateX(4px) rotate(2deg); }
+    0%,100% { transform: translateX(0) rotate(0); }
+    20% { transform: translateX(-7px) rotate(-4deg); }
+    40% { transform: translateX(7px) rotate(4deg); }
+    60% { transform: translateX(-5px) rotate(-3deg); }
+    80% { transform: translateX(5px) rotate(3deg); }
   }
   .tile.hint .tile-face {
     animation: hintGlow .9s ease infinite;
@@ -375,12 +377,13 @@
   .ad-skip.ready { background: var(--gold); color: #6a3e00; }
 
   #toast {
-    position: absolute; left: 50%; bottom: 38%;
+    position: absolute; left: 50%; bottom: 40%;
     transform: translateX(-50%) translateY(10px);
-    background: rgba(40, 28, 12, .88); color: #fff;
-    padding: 8px 14px; border-radius: 99px; font-size: 13px; font-weight: 700;
-    opacity: 0; pointer-events: none; z-index: 60; white-space: nowrap;
+    background: rgba(40, 28, 12, .92); color: #fff;
+    padding: 12px 18px; border-radius: 99px; font-size: 15px; font-weight: 800;
+    opacity: 0; pointer-events: none; z-index: 70; white-space: nowrap;
     transition: .25s ease;
+    box-shadow: 0 8px 20px rgba(0,0,0,.25);
   }
   #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
@@ -509,22 +512,22 @@
     `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">${inner}</svg>`;
 
   const TYPES = [
-    { id: "sheep", name: "小羊", color: "#efe3c8", icon: svg(`<ellipse cx="32" cy="40" rx="20" ry="16" fill="#FFF6E8"/><circle cx="18" cy="26" r="8" fill="#FFF6E8"/><circle cx="32" cy="18" r="10" fill="#FFF6E8"/><circle cx="46" cy="26" r="8" fill="#FFF6E8"/><ellipse cx="32" cy="42" rx="13" ry="11" fill="#6D4C41"/><ellipse cx="27" cy="40" rx="3.2" ry="4" fill="#fff"/><ellipse cx="37" cy="40" rx="3.2" ry="4" fill="#fff"/><circle cx="28" cy="41" r="1.7" fill="#3E2723"/><circle cx="38" cy="41" r="1.7" fill="#3E2723"/><ellipse cx="32" cy="47" rx="4.2" ry="2.2" fill="#3E2723"/><circle cx="24" cy="44" r="3" fill="#FFAB91"/><circle cx="40" cy="44" r="3" fill="#FFAB91"/>`) },
-    { id: "grass", name: "青草", color: "#81c784", icon: svg(`<path d="M18 52c2-22 10-32 12-36 2 8 4 24 4 36" fill="#66BB6A"/><path d="M32 52c1-20 8-34 14-40-2 10-4 28-2 40" fill="#43A047"/><path d="M28 52c0-16-8-28-16-34 6 8 10 22 10 34" fill="#A5D6A7"/>`) },
-    { id: "carrot", name: "胡萝卜", color: "#ffb74d", icon: svg(`<path d="M32 14c8 10 14 28 8 40-10 4-18-10-16-28 2-6 6-10 8-12z" fill="#FF7A1A"/><path d="M30 16c6 8 10 22 6 34" stroke="#F57C00" stroke-width="2" fill="none"/><path d="M28 12c0-8 4-10 6-2 4-8 8-6 6 2 4-4 8 2 2 6-6-2-10 2-14 0-4 4-8-2-0-6z" fill="#7CB342"/>`) },
-    { id: "cabbage", name: "白菜", color: "#c5e1a5", icon: svg(`<ellipse cx="32" cy="36" rx="18" ry="20" fill="#C5E1A5"/><ellipse cx="32" cy="36" rx="12" ry="16" fill="#DCEDC8"/><path d="M32 18c2 8 2 20 0 32" stroke="#9CCC65" stroke-width="2" fill="none"/><path d="M24 24c6 6 8 16 6 24" stroke="#AED581" stroke-width="2" fill="none"/><path d="M40 24c-6 6-8 16-6 24" stroke="#AED581" stroke-width="2" fill="none"/>`) },
-    { id: "corn", name: "玉米", color: "#ffe082", icon: svg(`<path d="M22 18c0-8 20-8 20 0v28c0 10-20 10-20 0z" fill="#FBC02D"/><g fill="#F9A825"><circle cx="28" cy="22" r="2.2"/><circle cx="36" cy="22" r="2.2"/><circle cx="28" cy="30" r="2.2"/><circle cx="36" cy="30" r="2.2"/><circle cx="28" cy="38" r="2.2"/><circle cx="36" cy="38" r="2.2"/><circle cx="32" cy="26" r="2.2"/><circle cx="32" cy="34" r="2.2"/><circle cx="32" cy="42" r="2.2"/></g><path d="M24 16c-8 4-8 14-2 14 2-6 8-8 12-6-8-2-8-10-10-8zm16 0c8 4 8 14 2 14-2-6-8-8-12-6 8-2 8-10 10-8z" fill="#7CB342"/>`) },
-    { id: "bell", name: "铃铛", color: "#ffd54f", icon: svg(`<path d="M18 30c0-14 28-14 28 0v10c4 6-4 8-14 8s-18-2-14-8z" fill="#FFD54F"/><rect x="28" y="10" width="8" height="8" rx="3" fill="#FFC107"/><circle cx="32" cy="48" r="5" fill="#FF8F00"/><path d="M16 40h32" stroke="#FFC107" stroke-width="3"/>`) },
-    { id: "yarn", name: "毛线", color: "#f48fb1", icon: svg(`<circle cx="32" cy="34" r="18" fill="#F48FB1"/><path d="M20 26c10 4 18 4 24 0M18 34c12 6 20 6 28 0M22 44c8 4 14 4 20 0" stroke="#EC407A" stroke-width="2" fill="none"/><path d="M44 18c10 2 16 12 12 18" stroke="#F8BBD0" stroke-width="5" fill="none" stroke-linecap="round"/>`) },
-    { id: "flower", name: "小花", color: "#f8bbd0", icon: svg(`<circle cx="32" cy="20" r="8" fill="#F48FB1"/><circle cx="20" cy="28" r="8" fill="#F48FB1"/><circle cx="44" cy="28" r="8" fill="#F48FB1"/><circle cx="24" cy="42" r="8" fill="#F48FB1"/><circle cx="40" cy="42" r="8" fill="#F48FB1"/><circle cx="32" cy="32" r="8" fill="#FFD54F"/><rect x="30" y="40" width="4" height="16" rx="2" fill="#81C784"/>`) },
-    { id: "mushroom", name: "蘑菇", color: "#ef9a9a", icon: svg(`<path d="M12 32c0-16 40-16 40 0 0 8-8 10-20 10S12 40 12 32z" fill="#E53935"/><ellipse cx="24" cy="24" rx="5" ry="3.5" fill="#FFCDD2"/><ellipse cx="38" cy="22" rx="4" ry="3" fill="#FFCDD2"/><ellipse cx="42" cy="30" rx="3.5" ry="2.5" fill="#FFCDD2"/><rect x="24" y="38" width="16" height="14" rx="6" fill="#FFE0B2"/>`) },
-    { id: "apple", name: "苹果", color: "#e57373", icon: svg(`<path d="M20 28c-2-12 24-16 26 0 4 16-6 28-14 28s-16-10-12-28z" fill="#E53935"/><path d="M32 16c2-8 10-8 10-2" stroke="#6D4C41" stroke-width="3" fill="none"/><ellipse cx="38" cy="18" rx="7" ry="4" fill="#81C784" transform="rotate(-20 38 18)"/>`) },
-    { id: "butterfly", name: "蝴蝶", color: "#ce93d8", icon: svg(`<ellipse cx="20" cy="24" rx="12" ry="14" fill="#AB47BC"/><ellipse cx="44" cy="24" rx="12" ry="14" fill="#AB47BC"/><ellipse cx="22" cy="44" rx="9" ry="10" fill="#CE93D8"/><ellipse cx="42" cy="44" rx="9" ry="10" fill="#CE93D8"/><rect x="30" y="16" width="4" height="32" rx="2" fill="#6A1B9A"/><circle cx="32" cy="18" r="3" fill="#4A148C"/>`) },
-    { id: "milk", name: "牛奶", color: "#fff59d", icon: svg(`<path d="M24 16h16l4 8v28a6 6 0 0 1-6 6H26a6 6 0 0 1-6-6V24z" fill="#FFFDE7" stroke="#FFE082" stroke-width="2"/><rect x="26" y="8" width="12" height="10" rx="3" fill="#FFD54F"/><path d="M22 26h20v10H22z" fill="#FFF9C4"/>`) },
-    { id: "berry", name: "草莓", color: "#ef9a9a", icon: svg(`<path d="M32 18c16 4 20 20 12 30-8 8-16 8-24 0-8-10-4-26 12-30z" fill="#F44336"/><g fill="#FFEB3B"><circle cx="26" cy="32" r="2"/><circle cx="34" cy="28" r="2"/><circle cx="38" cy="38" r="2"/><circle cx="28" cy="42" r="2"/><circle cx="36" cy="46" r="1.6"/></g><path d="M22 18c6 2 10-6 16-2-2 6-10 8-16 6-6 4-10-2-8-6 4 2 6 2 8 2z" fill="#66BB6A"/>`) },
-    { id: "grape", name: "葡萄", color: "#b39ddb", icon: svg(`<circle cx="32" cy="22" r="7" fill="#7E57C2"/><circle cx="24" cy="30" r="7" fill="#673AB7"/><circle cx="40" cy="30" r="7" fill="#673AB7"/><circle cx="20" cy="42" r="7" fill="#5E35B1"/><circle cx="32" cy="40" r="7" fill="#7E57C2"/><circle cx="44" cy="42" r="7" fill="#5E35B1"/><path d="M32 10c0 6 6 8 8 10" stroke="#6D4C41" stroke-width="2" fill="none"/><ellipse cx="38" cy="12" rx="6" ry="3" fill="#81C784"/>`) },
-    { id: "sun", name: "太阳", color: "#ffe082", icon: svg(`<circle cx="32" cy="32" r="12" fill="#FFD54F"/><g stroke="#FFB300" stroke-width="3" stroke-linecap="round"><path d="M32 8v8M32 48v8M8 32h8M48 32h8M14 14l6 6M44 44l6 6M14 50l6-6M44 20l6-6"/></g><circle cx="32" cy="32" r="8" fill="#FFF59D"/>`) },
-    { id: "heart", name: "爱心", color: "#ef9a9a", icon: svg(`<path d="M32 52s-22-12-22-26c0-8 6-14 12-14 4 0 8 2 10 6 2-4 6-6 10-6 6 0 12 6 12 14 0 14-22 26-22 26z" fill="#EF5350"/>`) },
+    { id: "sheep", name: "小羊", color: "#8D6E63", icon: svg(`<ellipse cx="32" cy="40" rx="20" ry="16" fill="#FFF6E8"/><circle cx="18" cy="26" r="8" fill="#FFF6E8"/><circle cx="32" cy="18" r="10" fill="#FFF6E8"/><circle cx="46" cy="26" r="8" fill="#FFF6E8"/><ellipse cx="32" cy="42" rx="13" ry="11" fill="#6D4C41"/><ellipse cx="27" cy="40" rx="3.2" ry="4" fill="#fff"/><ellipse cx="37" cy="40" rx="3.2" ry="4" fill="#fff"/><circle cx="28" cy="41" r="1.7" fill="#3E2723"/><circle cx="38" cy="41" r="1.7" fill="#3E2723"/><ellipse cx="32" cy="47" rx="4.2" ry="2.2" fill="#3E2723"/><circle cx="24" cy="44" r="3" fill="#FFAB91"/><circle cx="40" cy="44" r="3" fill="#FFAB91"/>`) },
+    { id: "grass", name: "青草", color: "#43A047", icon: svg(`<path d="M18 52c2-22 10-32 12-36 2 8 4 24 4 36" fill="#66BB6A"/><path d="M32 52c1-20 8-34 14-40-2 10-4 28-2 40" fill="#2E7D32"/><path d="M28 52c0-16-8-28-16-34 6 8 10 22 10 34" fill="#A5D6A7"/>`) },
+    { id: "carrot", name: "胡萝卜", color: "#FF6D00", icon: svg(`<path d="M32 14c8 10 14 28 8 40-10 4-18-10-16-28 2-6 6-10 8-12z" fill="#FF7A1A"/><path d="M30 16c6 8 10 22 6 34" stroke="#E65100" stroke-width="2" fill="none"/><path d="M28 12c0-8 4-10 6-2 4-8 8-6 6 2 4-4 8 2 2 6-6-2-10 2-14 0-4 4-8-2-0-6z" fill="#7CB342"/>`) },
+    { id: "apple", name: "苹果", color: "#E53935", icon: svg(`<path d="M20 28c-2-12 24-16 26 0 4 16-6 28-14 28s-16-10-12-28z" fill="#E53935"/><path d="M32 16c2-8 10-8 10-2" stroke="#6D4C41" stroke-width="3" fill="none"/><ellipse cx="38" cy="18" rx="7" ry="4" fill="#81C784" transform="rotate(-20 38 18)"/>`) },
+    { id: "grape", name: "葡萄", color: "#7E57C2", icon: svg(`<circle cx="32" cy="22" r="7" fill="#7E57C2"/><circle cx="24" cy="30" r="7" fill="#673AB7"/><circle cx="40" cy="30" r="7" fill="#673AB7"/><circle cx="20" cy="42" r="7" fill="#5E35B1"/><circle cx="32" cy="40" r="7" fill="#7E57C2"/><circle cx="44" cy="42" r="7" fill="#5E35B1"/><path d="M32 10c0 6 6 8 8 10" stroke="#6D4C41" stroke-width="2" fill="none"/><ellipse cx="38" cy="12" rx="6" ry="3" fill="#81C784"/>`) },
+    { id: "corn", name: "玉米", color: "#FDD835", icon: svg(`<path d="M22 18c0-8 20-8 20 0v28c0 10-20 10-20 0z" fill="#FBC02D"/><g fill="#F9A825"><circle cx="28" cy="22" r="2.2"/><circle cx="36" cy="22" r="2.2"/><circle cx="28" cy="30" r="2.2"/><circle cx="36" cy="30" r="2.2"/><circle cx="28" cy="38" r="2.2"/><circle cx="36" cy="38" r="2.2"/><circle cx="32" cy="26" r="2.2"/><circle cx="32" cy="34" r="2.2"/><circle cx="32" cy="42" r="2.2"/></g><path d="M24 16c-8 4-8 14-2 14 2-6 8-8 12-6-8-2-8-10-10-8zm16 0c8 4 8 14 2 14-2-6-8-8-12-6 8-2 8-10 10-8z" fill="#7CB342"/>`) },
+    { id: "flower", name: "小花", color: "#EC407A", icon: svg(`<circle cx="32" cy="20" r="8" fill="#F48FB1"/><circle cx="20" cy="28" r="8" fill="#F48FB1"/><circle cx="44" cy="28" r="8" fill="#F48FB1"/><circle cx="24" cy="42" r="8" fill="#F48FB1"/><circle cx="40" cy="42" r="8" fill="#F48FB1"/><circle cx="32" cy="32" r="8" fill="#FFD54F"/><rect x="30" y="40" width="4" height="16" rx="2" fill="#81C784"/>`) },
+    { id: "milk", name: "牛奶", color: "#42A5F5", icon: svg(`<path d="M24 16h16l4 8v28a6 6 0 0 1-6 6H26a6 6 0 0 1-6-6V24z" fill="#E3F2FD" stroke="#42A5F5" stroke-width="2"/><rect x="26" y="8" width="12" height="10" rx="3" fill="#1E88E5"/><path d="M22 26h20v10H22z" fill="#BBDEFB"/>`) },
+    { id: "mushroom", name: "蘑菇", color: "#FF7043", icon: svg(`<path d="M12 32c0-16 40-16 40 0 0 8-8 10-20 10S12 40 12 32z" fill="#E53935"/><ellipse cx="24" cy="24" rx="5" ry="3.5" fill="#FFCDD2"/><ellipse cx="38" cy="22" rx="4" ry="3" fill="#FFCDD2"/><ellipse cx="42" cy="30" rx="3.5" ry="2.5" fill="#FFCDD2"/><rect x="24" y="38" width="16" height="14" rx="6" fill="#FFE0B2"/>`) },
+    { id: "butterfly", name: "蝴蝶", color: "#26C6DA", icon: svg(`<ellipse cx="20" cy="24" rx="12" ry="14" fill="#26C6DA"/><ellipse cx="44" cy="24" rx="12" ry="14" fill="#00ACC1"/><ellipse cx="22" cy="44" rx="9" ry="10" fill="#80DEEA"/><ellipse cx="42" cy="44" rx="9" ry="10" fill="#80DEEA"/><rect x="30" y="16" width="4" height="32" rx="2" fill="#006064"/><circle cx="32" cy="18" r="3" fill="#004D40"/>`) },
+    { id: "sun", name: "太阳", color: "#FFA000", icon: svg(`<circle cx="32" cy="32" r="12" fill="#FFD54F"/><g stroke="#FF6F00" stroke-width="3" stroke-linecap="round"><path d="M32 8v8M32 48v8M8 32h8M48 32h8M14 14l6 6M44 44l6 6M14 50l6-6M44 20l6-6"/></g><circle cx="32" cy="32" r="8" fill="#FFF59D"/>`) },
+    { id: "heart", name: "爱心", color: "#F06292", icon: svg(`<path d="M32 52s-22-12-22-26c0-8 6-14 12-14 4 0 8 2 10 6 2-4 6-6 10-6 6 0 12 6 12 14 0 14-22 26-22 26z" fill="#EC407A"/>`) },
+    { id: "yarn", name: "毛线", color: "#AB47BC", icon: svg(`<circle cx="32" cy="34" r="18" fill="#AB47BC"/><path d="M20 26c10 4 18 4 24 0M18 34c12 6 20 6 28 0M22 44c8 4 14 4 20 0" stroke="#6A1B9A" stroke-width="2" fill="none"/><path d="M44 18c10 2 16 12 12 18" stroke="#CE93D8" stroke-width="5" fill="none" stroke-linecap="round"/>`) },
+    { id: "bell", name: "铃铛", color: "#FFD54F", icon: svg(`<path d="M18 30c0-14 28-14 28 0v10c4 6-4 8-14 8s-18-2-14-8z" fill="#FFD54F"/><rect x="28" y="10" width="8" height="8" rx="3" fill="#FFC107"/><circle cx="32" cy="48" r="5" fill="#FF8F00"/><path d="M16 40h32" stroke="#FFC107" stroke-width="3"/>`) },
+    { id: "cabbage", name: "白菜", color: "#9CCC65", icon: svg(`<ellipse cx="32" cy="36" rx="18" ry="20" fill="#C5E1A5"/><ellipse cx="32" cy="36" rx="12" ry="16" fill="#DCEDC8"/><path d="M32 18c2 8 2 20 0 32" stroke="#7CB342" stroke-width="2" fill="none"/><path d="M24 24c6 6 8 16 6 24" stroke="#AED581" stroke-width="2" fill="none"/><path d="M40 24c-6 6-8 16-6 24" stroke="#AED581" stroke-width="2" fill="none"/>`) },
+    { id: "berry", name: "草莓", color: "#C62828", icon: svg(`<path d="M32 18c16 4 20 20 12 30-8 8-16 8-24 0-8-10-4-26 12-30z" fill="#F44336"/><g fill="#FFEB3B"><circle cx="26" cy="32" r="2"/><circle cx="34" cy="28" r="2"/><circle cx="38" cy="38" r="2"/><circle cx="28" cy="42" r="2"/><circle cx="36" cy="46" r="1.6"/></g><path d="M22 18c6 2 10-6 16-2-2 6-10 8-16 6-6 4-10-2-8-6 4 2 6 2 8 2z" fill="#66BB6A"/>`) },
   ];
 
   const SHEEP_SVG = svg(`<ellipse cx="32" cy="44" rx="20" ry="14" fill="#FFF6E8"/><circle cx="16" cy="32" r="9" fill="#FFF6E8"/><circle cx="32" cy="22" r="12" fill="#FFF6E8"/><circle cx="48" cy="32" r="9" fill="#FFF6E8"/><ellipse cx="32" cy="46" rx="14" ry="11" fill="#6D4C41"/><ellipse cx="26" cy="44" rx="3.4" ry="4.2" fill="#fff"/><ellipse cx="38" cy="44" rx="3.4" ry="4.2" fill="#fff"/><circle cx="27" cy="45" r="1.8" fill="#3E2723"/><circle cx="39" cy="45" r="1.8" fill="#3E2723"/><ellipse cx="32" cy="51" rx="4.5" ry="2.4" fill="#3E2723"/><circle cx="22" cy="48" r="3.2" fill="#FFAB91"/><circle cx="42" cy="48" r="3.2" fill="#FFAB91"/><rect x="24" y="56" width="5" height="6" rx="2" fill="#5D4037"/><rect x="35" y="56" width="5" height="6" rx="2" fill="#5D4037"/>`);
@@ -754,7 +757,7 @@
     el.textContent = msg;
     el.classList.add("show");
     clearTimeout(toast._t);
-    toast._t = setTimeout(() => el.classList.remove("show"), 1500);
+    toast._t = setTimeout(() => el.classList.remove("show"), 2000);
   }
   function vibrate(ms) { try { navigator.vibrate && navigator.vibrate(ms); } catch(e) {} }
 
@@ -777,13 +780,17 @@
   function layoutTiles() {
     const board = G.tiles.filter(t => t.status === "board");
     if (!board.length) return;
+    const areaW = stage.clientWidth;
+    const areaH = stage.clientHeight;
+    if (areaW < 20 || areaH < 20) {
+      requestAnimationFrame(() => { layoutTiles(); updateCovered(); });
+      return;
+    }
     let minC = Infinity, maxC = -Infinity, minR = Infinity, maxR = -Infinity;
     for (const t of G.tiles) {
       minC = Math.min(minC, t.col); maxC = Math.max(maxC, t.col);
       minR = Math.min(minR, t.row); maxR = Math.max(maxR, t.row);
     }
-    const areaW = stage.clientWidth;
-    const areaH = stage.clientHeight;
     const GRID_X = 30, GRID_Y = 32, TW = 56, TH = 64;
     const rawW = (maxC - minC) * GRID_X + TW;
     const rawH = (maxR - minR) * GRID_Y + TH;
@@ -806,22 +813,32 @@
     }
   }
 
+  function styleFace(tile) {
+    const face = tile.el.querySelector(".tile-face");
+    const spec = TYPES[tile.type];
+    face.style.borderColor = spec.color;
+    face.style.background = `linear-gradient(180deg, #fffefb 0%, ${spec.color}33 100%)`;
+    face.innerHTML = spec.icon;
+    tile.el.dataset.type = spec.id;
+    tile.el.title = spec.name;
+  }
+
   function createTileEl(tile) {
     const el = document.createElement("div");
     el.className = "tile";
-    el.innerHTML = `<div class="tile-face">${TYPES[tile.type].icon}</div><div class="tile-mask" hidden></div>`;
+    el.innerHTML = `<div class="tile-face"></div><div class="tile-mask" hidden></div>`;
+    tile.el = el;
+    styleFace(tile);
     el.addEventListener("pointerup", (e) => {
       e.preventDefault();
       e.stopPropagation();
       onTilePointer(tile);
     });
-    tile.el = el;
     return el;
   }
 
   function paintTileIcon(tile) {
-    const face = tile.el.querySelector(".tile-face");
-    face.innerHTML = TYPES[tile.type].icon;
+    styleFace(tile);
   }
 
   function updateCovered() {
@@ -837,7 +854,7 @@
 
   function updateHUD() {
     $("#remain-pill").textContent = "剩余 " + remaining();
-    $("#score-pill").textContent = String(G.score);
+    $("#score-pill").textContent = "分 " + G.score;
     $("#level-pill").textContent = G.level.name;
     const warn = G.slot.length >= 5;
     $("#remain-pill").classList.toggle("warn", warn && G.slot.length >= 6);
@@ -915,12 +932,10 @@
   }
 
   function findMatch() {
-    let i = 0;
-    while (i < G.slot.length) {
-      let j = i;
-      while (j < G.slot.length && G.slot[j].type === G.slot[i].type) j++;
-      if (j - i >= 3) return { start: i, tiles: G.slot.slice(i, i + 3) };
-      i = j;
+    const counts = new Map();
+    for (const t of G.slot) counts.set(t.type, (counts.get(t.type) || 0) + 1);
+    for (const [type, n] of counts) {
+      if (n >= 3) return { tiles: G.slot.filter(t => t.type === type).slice(0, 3) };
     }
     return null;
   }
@@ -1048,6 +1063,7 @@
     const n = Math.min(3, G.slot.length);
     const moved = G.slot.splice(0, n);
     const maxLayer = G.tiles.reduce((m, t) => t.status === "board" ? Math.max(m, t.layer) : m, 0);
+    const maxRow = G.tiles.reduce((m, t) => Math.max(m, t.row), 0);
     const sample = G.tiles.find(t => t.w) || moved[0];
     const tw = sample.w, th = sample.h, gap = 8;
     const total = n * tw + (n - 1) * gap;
@@ -1058,6 +1074,8 @@
     moved.forEach((t, i) => {
       t.status = "board";
       t.layer = maxLayer + 1;
+      t.col = i * 2 + 1;
+      t.row = maxRow + 3;
       t.w = tw; t.h = th;
       t.x = x0 + i * (tw + gap);
       t.y = y0;
@@ -1138,10 +1156,12 @@
     stage.innerHTML = "";
     $$(".slot-cell", slotTray).forEach(c => c.innerHTML = "");
     for (const t of G.tiles) stage.appendChild(createTileEl(t));
+    showScreen("screen-game");
+    void stage.offsetWidth;
     layoutTiles();
     updateCovered();
     updateHUD();
-    showScreen("screen-game");
+    requestAnimationFrame(() => { layoutTiles(); updateCovered(); });
     Sfx.startBgm();
     scheduleHint();
     if (level.id === "easy" && !Store.read().tut) {
